@@ -70,3 +70,11 @@ Command,Permission,Description
 /controlroom,Foreman+,Open the HQ grid management dashboard
 /setsectorhealth [id] [amount],Admin,Force set a sector's health percentage
 /reportdamage,Everyone,Report infrastructure damage to dispatch
+
+Credits
+DPS Development Team (Maintainer & Expansion)
+
+Randol (Original Script Creator)
+
+License
+You have permission to use this in your server and edit for your personal needs but are not allowed to redistribute.
