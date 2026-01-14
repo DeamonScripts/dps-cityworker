@@ -18,7 +18,7 @@ Requirements: https://github.com/overextended/ox_lib/releases
 We are planning to expand `randol_cityworker` from a simple task script into a comprehensive career simulation. Below are the planned features:
 
 ### 🧠 Strategic Grid Management
-- **Control Room UI:** A new management interface at City Works HQ dividing the city into sectors (Legion, Mirror Park, Sandy Shores).
+- **Control Room UI:** A new management interface at City Works HQ dividing the city into sectors (Legion, Mirror Park, Sandy Shores, Roxwood, Paleto).
 - **Sector Health:** Each sector has a "Health" percentage that drops over time or due to neglect.
 - **Consequences:** Reaching 0% health triggers massive **Blackouts** (lights off, store alarms triggering) in that specific zone, forcing players to prioritize emergency repairs strategically.
 
