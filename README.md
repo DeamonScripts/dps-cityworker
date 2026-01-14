@@ -72,9 +72,17 @@ exports['dps-cityworker']:GetSectorHealth(sectorId)
 exports['dps-cityworker']:TriggerBlackout(sectorId)
 exports['dps-cityworker']:GetPlayerSeniority(source)
 ```
-## Command,Permission,Description
-/workstatusEveryoneCheck your current rank and job stats/controlroomForeman+Open the HQ grid management dashboard/setsectorhealth [id] [amount]AdminForce set a sector's health percentage/reportdamageEveryoneReport infrastructure damage to dispatch
+## Client 
+```lua
+exports['dps-cityworker']:IsPlayerOnDuty()
+exports['dps-cityworker']:GetNearestWorkZone()
 ```
+## Command,Permission,Description
+/workstatusEveryoneCheck your current rank and job stats
+/controlroomForeman+Open the HQ grid management dashboard
+/setsectorhealth [id] [amount]AdminForce set a sector's health percentage
+/reportdamageEveryoneReport infrastructure damage to dispatch
+
 ## Credits
 DPS Development Team (Maintainer & Expansion)
 
