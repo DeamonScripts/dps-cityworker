@@ -119,11 +119,14 @@ lib.callback.register('dps-cityworker:server:Payment', function(source)
     local rankData = Config.Ranks[Players[src].rank] or Config.Ranks[1]
     local payment = math.floor(Config.Economy.BasePay * rankData.payMultiplier)
 
-    -- 2. Add Money (Generic Wrapper)
-    -- You will need to swap this line for your specific framework export
-    -- exports.ox_inventory:AddItem(src, 'money', payment) 
-    -- OR: xPlayer.addMoney(payment)
-    print(('[DEBUG] Paid %s $%d'):format(GetPlayerName(src), payment))
+    -- 2. Add Money (Bridge Function)
+    local success = AddMoney(src, Config.Economy.Account or 'cash', payment)
+    
+    if success then
+         -- print(('[LOG] Paid %s $%d'):format(GetCharacterName(src), payment))
+    else
+        print(('[ERROR] Failed to pay %s (Player not found or invalid account)'):format(src))
+    end
 
     -- 3. Handle Progression (XP)
     local xpGain = math.random(15, 25)
