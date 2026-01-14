@@ -1,102 +1,214 @@
+# DPS City Worker
 
-# dps-cityworker - City Worker Career Simulation
+**Turn utility work into a full career simulation.**
 
-A comprehensive career simulation resource for FiveM that transforms simple utility tasks into a fully managed city infrastructure system. Features strategic grid management, persistent world damage, and a player-run contractor economy.
+This isn't a basic delivery script. Players build careers as city infrastructure specialists - starting as laborers, working their way up to Foremen managing entire grid sectors. The city's infrastructure decays over time, creating real consequences when maintenance is neglected.
 
-## Features
+---
 
-- **Strategic Grid Management**: City is divided into managed sectors (Legion, Mirror Park, Sandy Shores) with dynamic health tracking.
-- **Persistent Decay**: Infrastructure damage (potholes, broken lights) is saved to the database and worsens over time if neglected.
-- **Contractor Economy**: Players can register utility companies and bid on government maintenance contracts.
-- **Union Progression**: A 5-tier seniority system unlocking specialized equipment and pay grades.
-- **Control Room UI**: Advanced dashboard for monitoring grid health and dispatching crews.
-- **Traffic Control**: Functional props (cones, barriers) that actively reroute NPC traffic around work zones.
+## What Players Experience
 
-## Dependencies
+### Start as a Probationary Laborer
+New workers start at **City Works HQ** where they clock in and receive a utility truck:
+- Get assigned repair tasks across the city
+- Complete skill checks to finish repairs
+- Earn XP and money for each completed job
 
-- [ox_lib](https://github.com/overextended/ox_lib)
-- [ox_target](https://github.com/overextended/ox_target)
-- [oxmysql](https://github.com/overextended/oxmysql)
-- [qb-core](https://github.com/qbcore-framework/qb-core) or ESX Legacy
+### Build Your Career
+Every repair matters. The system tracks:
+- **Total Repairs Completed** - Your work history
+- **XP & Rank Progress** - Unlock harder (higher-paying) tasks
+- **Sector Health Contributions** - Your impact on the city
 
-## Installation
+### The Progression System
 
-1. Copy `dps-cityworker` to your resources folder.
-2. Import `sql/cityworker.sql` into your database.
-3. Add `ensure dps-cityworker` to your `server.cfg`.
-4. Configure `config.lua` to set your framework and pricing.
+| Rank | Title | Unlocks |
+|------|-------|---------|
+| 1 | Probationary Laborer | Pothole Repair, Pipe Repair |
+| 2 | Junior Technician | Streetlight Repair |
+| 3 | Senior Technician | Electrical Box Repair |
+| 4 | Specialist | Transformer Maintenance, Hazmat Cleanup |
+| 5 | Foreman | **Control Room Access**, Crew Dispatch |
 
-## Progression System (Roadmap)
+### Real Consequences
+This isn't busy work. Infrastructure neglect has server-wide effects:
+- **Sector Health Decay** - Each area decays over time without maintenance
+- **Rolling Blackouts** - Sectors hitting 0% health trigger power outages
+- **Persistent Damage** - Damage reports saved to database, persist through restarts
 
-| Level | Rank | Unlocks |
-| :--- | :--- | :--- |
-| 1 | Probationary Laborer | Basic Pothole Repair, Cone Placement |
-| 2 | Junior Technician | Streetlight Repair, Utility Truck (Tier 1) |
-| 3 | Senior Technician | Electrical Box Repair, Transformer Minigames |
-| 4 | Specialist | Hazmat Cleanup, High-Voltage Equipment |
-| 5 | Foreman | Control Room Access, Contract Bidding, Crew Management |
+---
+
+## The Control Room (Foreman Only)
+
+Rank 5 Foremen get access to the **Grid Control Dashboard**:
+- Monitor real-time health of all city sectors
+- Dispatch crews to critical areas
+- View which sectors need priority attention
+
+The NUI dashboard shows Legion Square, Mirror Park, and Sandy Shores with live health bars.
+
+---
+
+## Task Types
+
+| Task | Rank Required | Difficulty | XP |
+|------|---------------|------------|-----|
+| Pothole Repair | 1 | Easy | 15 |
+| Water Pipe Repair | 1 | Easy | 20 |
+| Streetlight Repair | 2 | Medium | 25 |
+| Electrical Box | 3 | Medium | 35 |
+| Transformer Maintenance | 4 | Hard | 50 |
+| Hazmat Cleanup | 4 | Hard | 60 |
+
+Higher rank = access to harder tasks with better pay.
+
+---
+
+## For Server Owners
+
+### Why Add This?
+
+**Player Engagement** - The career progression keeps workers coming back. They want to hit Foreman rank, see their impact on sector health.
+
+**Server Consequences** - Blackouts when sectors fail creates organic RP moments. Government must fund city maintenance or face consequences.
+
+**Low Maintenance** - Once configured, decay happens automatically. Workers self-organize to prevent blackouts.
+
+### Framework Support
+
+Works with your existing setup - no migrations needed:
+- **QBCore** / **QBX** / **ESX** (auto-detected)
+- **ox_target** / **qb-target**
+- **ox_lib** notifications and skill checks
+
+### Performance
+
+Built for busy servers:
+- Database persistence for sector health
+- Efficient decay loops (10-minute intervals)
+- Proper entity cleanup on clock-out
+
+---
+
+## Quick Start
+
+1. Drop in `resources/[jobs]/dps-cityworker`
+2. Run `sql/cityworker.sql`
+3. `ensure dps-cityworker`
+
+Full configuration in `config.lua`.
+
+---
 
 ## Configuration
 
 ### Main Settings (`config.lua`)
 ```lua
-Config = {}
-Config.Debug = false
-Config.Framework = 'qb' -- 'qb' or 'esx'
-Config.Target = 'ox_target'
+Config.Framework = 'qb' -- Auto-detected, but can force
+Config.Target = 'ox_target' -- or 'qb-target'
+Config.Notify = 'ox_lib' -- or 'qb' or 'esx'
 
--- Economic Settings
 Config.Economy = {
-    WeeklyBudget = 50000, -- Gov budget for maintenance
-    CompanyRegistrationFee = 5000,
-    BasePayPerTask = 250
+    BasePay = 250, -- Base payment per task
+    WeeklyBudget = 50000, -- Government budget (roadmap)
+    MaterialCost = 50,
 }
 
 Config.Sectors = {
-    ['legion_square'] = {
+    ['legion'] = {
         label = "Legion Square",
         decayRate = 0.5, -- % health lost per hour
-        blackoutThreshold = 0 -- % health where lights go out
+        blackoutThreshold = 0 -- Health % that triggers blackout
     },
-    ['sandy_shores'] = {
-        label = "Sandy Shores",
-        decayRate = 0.8,
-        blackoutThreshold = 10
-    }
 }
 ```
 
-## SQL
-```
-CREATE TABLE IF NOT EXISTS `city_worker_users` (
-  `citizenid` varchar(50) NOT NULL,
-  `rank` int(11) DEFAULT 1,
-  `xp` int(11) DEFAULT 0,
-  PRIMARY KEY (`citizenid`)
-);
-```
-### Exports
-## Server
-```Lua
+### Adding More Sectors
+Add entries to `Config.Sectors` in config.lua and matching cards in `web/index.html`.
+
+---
+
+## Commands
+
+| Command | Permission | Description |
+|---------|------------|-------------|
+| `/workstatus` | All | Check your rank and stats |
+| `/controlroom` | Rank 5+ | Open the Control Room dashboard |
+| `/reportdamage [type]` | All | Report infrastructure damage |
+| `/setsectorhealth [id] [%]` | Admin | Force set sector health |
+
+---
+
+## Exports
+
+### Server
+```lua
 exports['dps-cityworker']:GetSectorHealth(sectorId)
+exports['dps-cityworker']:GetAllSectorHealth()
 exports['dps-cityworker']:TriggerBlackout(sectorId)
 exports['dps-cityworker']:GetPlayerSeniority(source)
+exports['dps-cityworker']:RepairSector(coords, amount)
 ```
-## Client 
+
+### Client
 ```lua
 exports['dps-cityworker']:IsPlayerOnDuty()
 exports['dps-cityworker']:GetNearestWorkZone()
 ```
-## Command,Permission,Description
-- /workstatus - Check your current rank and job stats
-- /controlroom - Foreman+Open the HQ grid management dashboard (forman only)
-- /setsectorhealth - [id] [amount]AdminForce set a sector's health percentage (admin)
-- /reportdamage Report - infrastructure damage to dispatch
+
+---
+
+## Future Roadmap
+
+### Strategic Grid Management
+- **Control Room UI**: Management interface at City Works HQ dividing the city into sectors
+- **Sector Health**: Each sector has a "Health" percentage that drops over time
+- **Consequences**: 0% health triggers Blackouts in that zone
+
+### Persistent Infrastructure Decay
+- **Database Persistence**: Damage saved through server restarts
+- **Worsening Conditions**: Unfixed issues degrade further (deeper potholes cause tire damage)
+- **Government Incentive**: City Government must fund City Works to prevent disrepair
+
+### Contractor Economy (Planned)
+- **Player-Owned Companies**: Register utility sub-contractor companies
+- **Bidding System**: Mayor/City Government sets maintenance budget, companies bid on contracts
+- **Competition**: Companies like "Deamon Electric" or "Randol Roads" compete for city contracts
+
+---
+
+## Dependencies
+
+**Required:**
+- [ox_lib](https://github.com/overextended/ox_lib)
+- [ox_target](https://github.com/overextended/ox_target) or qb-target
+- [oxmysql](https://github.com/overextended/oxmysql)
+
+**Framework (one of):**
+- qb-core / qbx_core / es_extended
+
+---
+
+## Version History
+
+**v2.5.0** - Multi-framework support, bridge architecture, infrastructure persistence, task variety
+**v2.0.0** - Control Room UI, sector health system, rank progression
+**v1.0.0** - Initial release (basic pipe repair)
+
+---
 
 ## Credits
-DPS Development Team (Maintainer & Expansion)
 
-Randol (Original Script Creator)
+- **Randol** - Original concept and script
+- **DaemonAlex / DPSRP Development** - Career expansion and bridge architecture
+- Overextended (ox_lib, ox_target, oxmysql)
 
-License
+---
+
+## License
+
 You have permission to use this in your server and edit for your personal needs but are not allowed to redistribute.
+
+---
+
+*DPS City Worker - Keep the lights on.*

@@ -66,9 +66,67 @@ return {
         Input = {'e'}
     },
 
-    -- Traffic Control Props
-    Props = {
+    -- Task Props (visual markers for each task type)
+    -- All props verified to exist in GTA V
+    TaskProps = {
+        -- Basic Tasks
+        pipe = 'prop_waterpump_01',
+        pothole = 'prop_roadcone02a',
+        meter_reading = 'prop_toolchest_05',      -- Toolbox for meter reading
+        graffiti = 'prop_cs_spray_can',
+        trash = 'prop_rub_binbag_01',
+
+        -- Intermediate Tasks
+        streetlight = 'prop_worklight_03b',       -- Work light
+        hydrant = 'prop_fire_hydrant_2',          -- Fire hydrant (verified)
+        sign_repair = 'prop_sign_road_01a',
+        manhole = 'prop_roadcone02a',             -- Cone marking manhole
+        storm_drain = 'prop_barrier_work06a',     -- Work barrier for drain
+
+        -- Advanced Tasks
+        electrical = 'prop_elecbox_01a',
+        traffic_control = 'prop_roadcone02a',
+        tree_trimming = 'prop_tree_stump_01',
+        cable_install = 'prop_rail_boxpile',      -- Cable box
+
+        -- Expert Tasks
+        transformer = 'prop_sub_trans_01',
+        hazmat = 'prop_barrel_01a',
+        bridge_inspection = 'prop_roadcone02a',
+        utility_locating = 'prop_roadcone02a',
+
+        -- Emergency Tasks
+        water_main = 'prop_waterpump_01',
+        gas_leak = 'prop_barrel_02a',             -- Different barrel
+        downed_lines = 'prop_worklight_03a',      -- Work light marking danger
+        fallen_tree = 'prop_tree_fallen_02',      -- Fallen tree (verified)
+    },
+
+    -- Traffic Control Props (for setup tasks)
+    TrafficProps = {
         Cone = 'prop_roadcone02a',
         Barrier = 'prop_barrier_work05',
-    }
+        Sign_Stop = 'prop_sign_road_04b',
+        Sign_Slow = 'prop_sign_road_04a',
+        Light = 'prop_worklight_02a',
+    },
+
+    -- Animation dictionaries per task category
+    TaskAnimations = {
+        maintenance = { dict = 'amb@world_human_welding@male@base', anim = 'base' },
+        road = { dict = 'amb@world_human_const_drill@male@drill@base', anim = 'base' },
+        electrical = { dict = 'anim@heists@prison_heiststation@cop_reactions', anim = 'yourface' },
+        cleanup = { dict = 'timetable@floyd@clean_kitchen@base', anim = 'base' },
+        utility = { dict = 'amb@world_human_clipboard@male@base', anim = 'base' },
+        sewer = { dict = 'mini@repair', anim = 'fixing_a_ped' },
+        emergency = { dict = 'amb@world_human_welding@male@base', anim = 'base' },
+    },
+
+    -- Emergency Settings
+    Emergency = {
+        RandomChance = 15, -- % chance per check (every 10 min)
+        BonusMultiplier = 1.5, -- XP bonus for emergency response
+        PaymentMultiplier = 2.0, -- Payment bonus for emergency
+        MaxActivePerSector = 1, -- Only one emergency per sector
+    },
 }
