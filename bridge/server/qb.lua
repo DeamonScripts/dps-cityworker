@@ -1,32 +1,22 @@
-if GetResourceState('qb-core') ~= 'started' then return end
-
 local QBCore = exports['qb-core']:GetCoreObject()
 
-function GetPlayer(id)
-    return QBCore.Functions.GetPlayer(id)
+function GetPlayer(source)
+    return QBCore.Functions.GetPlayer(source)
 end
 
-function DoNotification(src, text, nType)
-    TriggerClientEvent('QBCore:Notify', src, text, nType)
+function AddMoney(source, account, amount)
+    local player = GetPlayer(source)
+    if player then
+        player.Functions.AddMoney(account, amount, "city-worker-pay")
+        return true
+    end
+    return false
 end
 
-function AddMoney(Player, moneyType, amount)
-    Player.Functions.AddMoney(moneyType, amount, "city-worker")
+function GetCharacterName(source)
+    local player = GetPlayer(source)
+    if player then
+        return player.PlayerData.charinfo.firstname .. ' ' .. player.PlayerData.charinfo.lastname
+    end
+    return GetPlayerName(source)
 end
-
-function handleExploit(id, reason)
-    MySQL.insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
-        GetPlayerName(id),
-        QBCore.Functions.GetIdentifier(id, 'license'),
-        QBCore.Functions.GetIdentifier(id, 'discord'),
-        QBCore.Functions.GetIdentifier(id, 'ip'),
-        reason,
-        2147483647,
-        'randol_cityworker'
-    })
-    DropPlayer(id, 'You were banned from the server for exploiting.')
-end
-
-RegisterNetEvent('QBCore:Server:OnPlayerUnload', function(source)
-    ServerOnLogout(source)
-end)
