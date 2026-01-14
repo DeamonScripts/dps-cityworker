@@ -1,0 +1,12 @@
+### dps-ainpcs Ultimate Roadmap
+## 10 items
+-- Voice Input (STT): Allow players to speak to NPCs via microphone instead of typing.
+-- Local LLM Support: Add support for running local models (Llama 3, Mistral) to eliminate API costs.
+-- Visual Perception: Use GPT-4o Vision so NPCs can comment on player outfits, vehicles, or held weapons.
+-- Procedural Mission Generator: NPCs generate dynamic, multi-step quests based on server economy/events.
+-- Phone Integration: NPCs can text/call players for job updates, rumors, or threats.
+-- Animation System: Sync NPC gestures (nodding, angry, scared) with the sentiment of their AI response.
+-- Faction Ecosystem: NPCs share information; angering one Vagos member lowers trust with all Vagos NPCs.
+-- In-Game Creator: Admin menu to place, configure, and prompt-engineer NPCs without touching code.
+-- Dispatch Integration: Civ NPCs automatically call 911/Dispatch if they witness a crime.
+-- Multi-Framework Support: Add bridges for ESX and Qbox compatibility.
